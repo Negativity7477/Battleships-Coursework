@@ -1,5 +1,5 @@
 import time
-from components import place_battleships, initialise_board, create_battleships
+import components
 import json
 
 def attack(coordinates: tuple, board: list, battleships: dict) -> bool:
@@ -13,6 +13,8 @@ def attack(coordinates: tuple, board: list, battleships: dict) -> bool:
     Returns:
         bool: returns whether that coordinate had a ship 
     """
+    for x in board:
+        print(x)
     x_coord = coordinates[0]
     y_coord = coordinates[1]
     square_contents = board[x_coord][y_coord] 
@@ -25,8 +27,7 @@ def attack(coordinates: tuple, board: list, battleships: dict) -> bool:
         board[x_coord][y_coord] = None 
         #square_contents is a string, so it must be converted to an int to decrement
         battleships[square_contents[0]] = str(int(battleships[square_contents[0]]) - 1)   
-        print("You hit")   
-        print(battleships)       
+        print("You hit")         
     return is_hit
 
 
@@ -36,24 +37,18 @@ def cli_coordinates_input() -> tuple:
     Returns:
         tuple: The input coordinate
     """
-    valid_coords = False
-    while not valid_coords: #loop through while coords are bad
-        coords = input("Enter a coord in the format x,y")
+    while True: #loop through while coords are bad
         try:
-            coords = coords.split(",") #split up the x and y
-            x_coord = int(coords[0])
-            y_coord = int(coords[1])
-            valid_coords = True #if there is no error, break the loop
-        except TypeError: 
-            valid_coords = False #keep looping until valid results
-            raise TypeError("Please only use integers")
+            coords = input("Enter a coord in the format x,y")
+            x_coord, y_coord = map(int, coords.split(',')) #split up the x and y and cast to int
+            coordinates = (x_coord, y_coord)
+            return coordinates #break the loop and return if hasn't crashed 
+        except ValueError: 
+            print("Please only use integers")
         except IndexError:
-            valid_coords = False #keep looping until valid results
-            raise IndexError("Please input inside of board")
+            print("Please input inside of board")
 
         
-    coordinates = (x_coord, y_coord)
-    return coordinates
     
 
 def simple_game_loop():
@@ -61,9 +56,9 @@ def simple_game_loop():
     """
     print("welcome to battleships")
     time.sleep(2.5) #Pauses on run
-    battleships = create_battleships()
-    board = initialise_board()
-    place_battleships(board, battleships)
+    battleships = components.create_battleships()
+    board = components.initialise_board()
+    components.place_battleships(board, battleships, "custom")
     game_over = False
     while not game_over: #loop through until all ships sunk
         coords = cli_coordinates_input()

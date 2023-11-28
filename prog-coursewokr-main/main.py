@@ -1,14 +1,16 @@
 from flask import Flask, render_template, request, jsonify
 import json
 import random
-from components import initialise_board, place_battleships, create_battleships
-from game_engine import attack
+import components
+import game_engine
  
 app = Flask(__name__)
 
+#ROUTE_FILE = "C:/Users/finng/Documents/Yr 11/Computer Science/Coding/Uni/Semester 1/Programming workshops/coursework 2/prog-coursewokr-main/"
+ROUTE_FILE = "H:/git/Battleships-Coursework/prog-coursewokr-main/"
 
-board = initialise_board()
-battleships = create_battleships()
+board = components.initialise_board()
+battleships = components.create_battleships()
 
 @app.route('/placement', methods=['GET', 'POST'])
 def placement_interface():
@@ -23,10 +25,10 @@ def placement_interface():
     
     elif request.method == 'POST':
         ship_data = request.get_json()
-        with open("C:/Users/finng/Documents/Yr 11/Computer Science/Coding/Uni/Semester 1/Programming workshops/coursework 2/prog-coursewokr-main/" + 'placement.json', 'w') as json_file:
+        with open(ROUTE_FILE + 'placement.json', 'w') as json_file:
             json.dump(ship_data, json_file) 
         global player_board
-        player_board = place_battleships(board, battleships)
+        player_board = components.place_battleships(board, battleships)
         return jsonify({'message': 'Received'}), 200 
 
 @app.route('/', methods=['GET'])
@@ -36,6 +38,10 @@ def root():
     Returns:
         The main html with the parameters it needs
     """
+    global ai_game_board
+    ai_board = components.initialise_board()
+    ai_ships = components.create_battleships()
+    ai_game_board = components.place_battleships(board=ai_board, ships=ai_ships, algorithm="random")
     if request.method == 'GET':
         return render_template('main.html', player_board=player_board, board_size = 10) #board should be an intilised board based on past function
     
@@ -50,7 +56,7 @@ def process_attack():
     y = request.args.get('y')
     coordinates = (int(x),int(y))
 
-    hit = attack(coordinates=coordinates, board=player_board, battleships=battleships)
+    hit = game_engine.attack(coordinates=coordinates, board=ai_game_board, battleships=battleships)
     #Use the coords to attack the AI board (generate the board in root function)
 
     finished = True
