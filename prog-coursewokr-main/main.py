@@ -3,6 +3,7 @@ import json
 import random
 import components
 import game_engine
+import mp_game_engine
  
 app = Flask(__name__)
 
@@ -41,7 +42,7 @@ def root():
     global ai_game_board
     ai_board = components.initialise_board()
     ai_ships = components.create_battleships()
-    ai_game_board = components.place_battleships(board=ai_board, ships=ai_ships, algorithm="random")
+    ai_game_board = components.place_battleships(board=ai_board, ships=ai_ships, algorithm="random") #generates a board for the AI and globalises it
     if request.method == 'GET':
         return render_template('main.html', player_board=player_board, board_size = 10) #board should be an intilised board based on past function
     
@@ -57,19 +58,16 @@ def process_attack():
     coordinates = (int(x),int(y))
 
     hit = game_engine.attack(coordinates=coordinates, board=ai_game_board, battleships=battleships)
-    #Use the coords to attack the AI board (generate the board in root function)
+    #Use the coords to attack the AI board
 
     finished = True
     for value in battleships.values():
             if value != '0': #Only run when all dict values are 0
                 finished = False     
     if finished:
-        return jsonify({'hit': hit, 'AI_turn': (0,0), 'finished':"Game over"})
-    #AI_turh: generate_attack(maybe params i dont know)
+        return jsonify({'hit': hit, 'AI_Turn': mp_game_engine.generate_attack(board), 'finished':"Game over"})
     else:
-        random_x = random.randrange(0, len(board))
-        random_y = random.randrange(0,len(board))
-        return jsonify({'hit': hit, 'AI_turn': (random_x,random_y), 'log':"Attacked and hit"})
+        return jsonify({'hit': hit, 'AI_Turn': mp_game_engine.generate_attack(board), 'log':"Attacked and hit"})
 
 if __name__ == '__main__':
     app.run()

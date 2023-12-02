@@ -31,7 +31,6 @@ def create_battleships(filename: str = "battleships.txt") -> dict:
             (key, val) = line.split(':')
             battleships[key] = int(val)
        
-    #print(battleships) 
     return battleships
 
 

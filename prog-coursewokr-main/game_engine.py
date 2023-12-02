@@ -13,8 +13,6 @@ def attack(coordinates: tuple, board: list, battleships: dict) -> bool:
     Returns:
         bool: returns whether that coordinate had a ship 
     """
-    for x in board:
-        print(x)
     x_coord = coordinates[0]
     y_coord = coordinates[1]
     square_contents = board[x_coord][y_coord] 
