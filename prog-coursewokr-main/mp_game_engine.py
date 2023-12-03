@@ -32,6 +32,19 @@ def initialise_players(player:str = "two") -> dict:
     
     players = {username_1: dict_values_1, username_2:dict_values_2}
     
+    
+    player_ships = players[username_1][0]
+    player_board = players[username_1][1]
+    key, val = next(iter(players.items()))
+    for x in val:
+        print(x)
+    
+    for x in player_board:
+        print(x)
+    print("\n",player_ships)
+    
+    print(players)
+    
     return players
 
 def generate_attack(board:list) -> tuple:
@@ -47,6 +60,24 @@ def generate_attack(board:list) -> tuple:
     return coordinates
     
     
+def print_board(board:list):
+    """Prints an ascii representation of the board
+    Args:
+        board: the board to represent
+    """    
+    ascii_rep = initialise_players(len(board))
+    for rows in board:
+        print(rows)
+        for columns in rows:
+            print(columns)
+            if columns == None:
+                ascii_rep[rows][columns] = "."
+            else:
+                ascii_rep[rows][columns] = "="
+    for x in ascii_rep:
+        print(x)
+
+    
 def ai_opponent_game_loop():
     """The main loop that runs if this is the main file. This allows the player to 
     go against an AI opponent
@@ -56,18 +87,19 @@ def ai_opponent_game_loop():
     players = initialise_players("AI")
     ai_board = players["AI"][0]
     ai_ships = players["AI"][1]
-    player_board = players[username_1][0]
+    player_board = players[username_1][0] #Something is going wrong here but i have no fucking clue what
     player_ships = players[username_1][1]
     finished = False #flag to loop through
     while not finished:
         attack_coords = game_engine.cli_coordinates_input()
         
         print("Player, ")#Allows the ability to distinguish between players and AI attacks
-        player_hit = game_engine.attack(attack_coords, ai_board, ai_ships)
-        
+        game_engine.attack(attack_coords, ai_board, ai_ships)
+
         print("Ai, ") #Allows the ability to distinguish between players and AI attacks
         ai_attack = generate_attack(player_board)
-        ai_hit = game_engine.attack(ai_attack, player_board, player_ships)
+
+        game_engine.attack(ai_attack, player_board, player_ships)
 
         no_ai_ships = all(value == 0 for value in ai_ships)  
         no_player_ships = all(value == 0 for value in player_ships)

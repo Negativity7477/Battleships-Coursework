@@ -92,7 +92,6 @@ def place_battleships(board: list, ships: dict, algorithm: str = "custom") -> li
             with open(ROUTE_FILE + 'placement.json') as ship_data:
                 data = json.load(ship_data) #convert the json into a useable foramt
                 json_values = list(data.values()) #make a list of the json values
-                json_keys = list(data.keys()) #make a list of the json keys
             start_row = int(json_values[x][1]) #access the string stored in start x coord of json file for each ship and cast to int
             start_column = int(json_values[x][0])
             rotation = str(json_values[x][2]) #access the rotation from the json file for each ship and cast to string

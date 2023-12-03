@@ -16,7 +16,7 @@ def attack(coordinates: tuple, board: list, battleships: dict) -> bool:
     x_coord = coordinates[0]
     y_coord = coordinates[1]
     square_contents = board[x_coord][y_coord] 
-    #sets square_content to whatever is in the square attacked by the user
+    #sets square_content to whatever is in the square attacked by whatever called the function
     if square_contents == None: #If didn't hit a battleship
         is_hit = False
         print("You missed")
@@ -66,7 +66,7 @@ def simple_game_loop():
         game_over = True
         for value in battleships.values():
             if value != '0': #Only run when all dict values are 0
-                game_over = False       
+                game_over = False      
     print("Game over")
 
 if __name__ == '__main__':
