@@ -3,8 +3,11 @@ import random
 '''import json to read json files and random for random placement
 '''
 
-#ROUTE_FILE = "C:/Users/finng/Documents/Yr 11/Computer Science/Coding/Uni/Semester 1/Programming workshops/coursework 2/prog-coursewokr-main/" 
-ROUTE_FILE = "H:/git/Battleships-Coursework/prog-coursewokr-main/"
+ROUTE_FILE = "D:/0000000 wrok/Uni/Semester 1/battleships colour/Battleships-Coursework/prog-coursewokr-main/" 
+#ROUTE_FILE = "H:/git/Battleships-Coursework/prog-coursewokr-main/"
+
+#Advice from Billy - When submitting, remove route file and leave a note in the READ ME
+#Note this fucks up one of the tests that checks if the file exists
 
 def initialise_board(size: int = 10) -> list:
     """Creates the board

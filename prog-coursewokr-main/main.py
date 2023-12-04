@@ -7,8 +7,8 @@ import mp_game_engine
  
 app = Flask(__name__)
 
-#ROUTE_FILE = "C:/Users/finng/Documents/Yr 11/Computer Science/Coding/Uni/Semester 1/Programming workshops/coursework 2/prog-coursewokr-main/"
-ROUTE_FILE = "H:/git/Battleships-Coursework/prog-coursewokr-main/"
+ROUTE_FILE = "D:/0000000 wrok/Uni/Semester 1/battleships colour/Battleships-Coursework/prog-coursewokr-main/"
+#ROUTE_FILE = "H:/git/Battleships-Coursework/prog-coursewokr-main/"
 
 board = components.initialise_board()
 battleships = components.create_battleships()

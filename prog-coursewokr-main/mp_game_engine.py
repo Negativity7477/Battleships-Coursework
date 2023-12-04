@@ -5,8 +5,8 @@ import time
 
 players = {}
 
-def initialise_players(player:str = "two") -> dict:
-    """Initialises the dictionary players and globalises it
+def initialise_player(username:str) -> dict:
+    """Initialises the dictionary 'players and globalises it
 
     Args:
         player (str): this allows the function be called with either 2 players, or a player and AI
@@ -14,48 +14,23 @@ def initialise_players(player:str = "two") -> dict:
         dict: the players dictionary where key is a username and value is a list of board and battleship
     """
     
-    global username_1
-    username_1 = input("Enter username one") #Globalise the username to use elsewhere
     board = components.initialise_board() 
-    battleships_1 = components.create_battleships() 
-    board_1 = components.place_battleships(board=board, ships = battleships_1, algorithm= "custom")
-    dict_values_1 = [board_1, battleships_1]
-    if player == "two": #Can have a second player or AI
-        global username_2
-        username_2 = input("Enter username two")
-    else:
-        username_2 = "AI"
-    battleships_2 = components.create_battleships()
-    board_2 = components.place_battleships(board=board, ships = battleships_2, algorithm="random")
-    dict_values_2 = [board_2, battleships_2]
-    #Create values for the other player, either AI or another person
+    battleships = components.create_battleships() 
+    board = components.place_battleships(board=board, ships = battleships, algorithm= "custom")
     
-    players = {username_1: dict_values_1, username_2:dict_values_2}
-    
-    
-    player_ships = players[username_1][0]
-    player_board = players[username_1][1]
-    key, val = next(iter(players.items()))
-    for x in val:
-        print(x)
-    
-    for x in player_board:
-        print(x)
-    print("\n",player_ships)
-    
-    print(players)
-    
+    global players
+    players[username] = {'board':board, 'ships':battleships} #key is username and board together (i think)
     return players
 
-def generate_attack(board:list) -> tuple:
+def generate_attack() -> tuple:
     """generates an AI attack
     Args:
         board (list): the players board to attack
     Returns:
         tuple: coordinates to attack the player board
     """
-    random_x = random.randrange(0, len(board)) 
-    random_y = random.randrange(0,len(board))  #creates a set of random coordinates within board
+    random_x = random.randrange(0, len(player_board)) 
+    random_y = random.randrange(0,len(player_board))  #creates a set of random coordinates within board
     coordinates = (random_x, random_y)
     return coordinates
     
@@ -64,13 +39,11 @@ def print_board(board:list):
     """Prints an ascii representation of the board
     Args:
         board: the board to represent
-    """    
-    ascii_rep = initialise_players(len(board))
-    for rows in board:
-        print(rows)
-        for columns in rows:
-            print(columns)
-            if columns == None:
+    """     
+    ascii_rep = components.initialise_board(len(board))
+    for rows in range(0, len(board)):
+        for columns in range(0, len(board)):
+            if board[rows][columns] == None:
                 ascii_rep[rows][columns] = "."
             else:
                 ascii_rep[rows][columns] = "="
@@ -84,11 +57,18 @@ def ai_opponent_game_loop():
     """
     print("welcome to battleships")
     time.sleep(2.5) #Pauses on run
-    players = initialise_players("AI")
-    ai_board = players["AI"][0]
-    ai_ships = players["AI"][1]
-    player_board = players[username_1][0] #Something is going wrong here but i have no fucking clue what
-    player_ships = players[username_1][1]
+    username_1 = input("enter username 1")
+    username_2 = "AI"
+    player_1_dict = initialise_player(username_1)
+    ai_dict = initialise_player(username_2)
+
+    global player_board
+    player_board = player_1_dict[username_1]['board']
+    player_ships = player_1_dict[username_1]['ships']
+    ai_board = ai_dict[username_2]['board']
+    ai_ships = ai_dict[username_2]['ships']
+    #extract the player's and AI's boards and ships into variables to use
+
     finished = False #flag to loop through
     while not finished:
         attack_coords = game_engine.cli_coordinates_input()
@@ -97,9 +77,11 @@ def ai_opponent_game_loop():
         game_engine.attack(attack_coords, ai_board, ai_ships)
 
         print("Ai, ") #Allows the ability to distinguish between players and AI attacks
-        ai_attack = generate_attack(player_board)
+        ai_attack = generate_attack()
 
         game_engine.attack(ai_attack, player_board, player_ships)
+
+        print_board(player_board)
 
         no_ai_ships = all(value == 0 for value in ai_ships)  
         no_player_ships = all(value == 0 for value in player_ships)
