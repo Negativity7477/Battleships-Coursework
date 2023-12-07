@@ -3,7 +3,7 @@ import random
 '''import json to read json files and random for random placement
 '''
 
-ROUTE_FILE = "D:/0000000 wrok/Uni/Semester 1/battleships colour/Battleships-Coursework/prog-coursewokr-main/" 
+#ROUTE_FILE = "D:/0000000 wrok/Uni/Semester 1/battleships colour/Battleships-Coursework/prog-coursewokr-main/" 
 #ROUTE_FILE = "H:/git/Battleships-Coursework/prog-coursewokr-main/"
 
 #Advice from Billy - When submitting, remove route file and leave a note in the READ ME
@@ -28,7 +28,7 @@ def create_battleships(filename: str = "battleships.txt") -> dict:
     """
     
     battleships = {}
-    with open(ROUTE_FILE + filename) as text_file:
+    with open(filename) as text_file:
         for line in text_file:
             line = line.strip()
             (key, val) = line.split(':')
@@ -92,7 +92,7 @@ def place_battleships(board: list, ships: dict, algorithm: str = "custom") -> li
                     
         #Below deals with a custom placement from a json file
         elif algorithm == "custom":
-            with open(ROUTE_FILE + 'placement.json') as ship_data:
+            with open('placement.json') as ship_data:
                 data = json.load(ship_data) #convert the json into a useable foramt
                 json_values = list(data.values()) #make a list of the json values
             start_row = int(json_values[x][1]) #access the string stored in start x coord of json file for each ship and cast to int

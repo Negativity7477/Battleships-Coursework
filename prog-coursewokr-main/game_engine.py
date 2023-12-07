@@ -19,12 +19,14 @@ def attack(coordinates: tuple, board: list, battleships: dict) -> bool:
     #sets square_content to whatever is in the square attacked by whatever called the function
     if square_contents == None: #If didn't hit a battleship
         is_hit = False
+        board[x_coord][y_coord] = "O" #This is to show that this coord has been shot and missed
         print("You missed")
     else:
         is_hit = True
         board[x_coord][y_coord] = None 
         #square_contents is a string, so it must be converted to an int to decrement
         battleships[square_contents[0]] = str(int(battleships[square_contents[0]]) - 1)   
+        board[x_coord][y_coord] = "X"
         print("You hit")         
     return is_hit
 
