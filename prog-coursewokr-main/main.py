@@ -8,13 +8,13 @@ import mp_game_engine
 app = Flask(__name__)
 
 #ROUTE_FILE = "D:/0000000 wrok/Uni/Semester 1/battleships colour/Battleships-Coursework/prog-coursewokr-main/"
-#ROUTE_FILE = "H:/git/Battleships-Coursework/prog-coursewokr-main/"
+ROUTE_FILE = "H:/git/Battleships-Coursework/prog-coursewokr-main/"
 
 board = components.initialise_board()
 player_battleships = components.create_battleships()
 ai_battleships = components.create_battleships()
 
-@app.route('/placement', methods=['GET', 'POST'])
+@app.route('/placement', methods=['GET', 'POST']) #Runs when visiting http://127.0.0.1:5000/placement
 def placement_interface():
     """Allows the user to place their battleships on the web inteface
 
@@ -22,18 +22,19 @@ def placement_interface():
         The parameters to render
     """
     
-    if request.method == 'GET':
+    if request.method == 'GET': #When we load the page, we render the placement.html template
         return render_template('placement.html', ships=player_battleships, board_size=10)
     
-    elif request.method == 'POST':
-        ship_data = request.get_json()
-        with open('placement.json', 'w') as json_file:
-            json.dump(ship_data, json_file) 
-        global player_board
-        player_board = components.place_battleships(board, player_battleships)
-        return jsonify({'message': 'Received'}), 200 
+    elif request.method == 'POST': #When we send the game, we recive data
+        ship_data = request.get_json() #Parse the recieved data into ship_data
+        with open(ROUTE_FILE + 'placement.json', 'w') as json_file: #Open our json for ship placement
+            json.dump(ship_data, json_file) #write the data into the placement json
+        global player_board 
+        algorithm_and_filename = ["custom", "placement.json"]
+        player_board = components.place_battleships(board, player_battleships, algorithm_and_filename) #now we can create a board and globalise it
+        return jsonify({'message': 'Received'}), 200 #Allows the front end to know we recieved the data
 
-@app.route('/', methods=['GET'])
+@app.route('/', methods=['GET']) #Runs on http://127.0.0.1:500
 def root():
     """The main logic behind the main page
 
@@ -43,9 +44,9 @@ def root():
     global ai_game_board
     ai_board = components.initialise_board()
     ai_ships = components.create_battleships()
-    ai_game_board = components.place_battleships(board=ai_board, ships=ai_ships, algorithm="random") #generates a board for the AI and globalises it
-    if request.method == 'GET':
-        return render_template('main.html', player_board=player_board, board_size = 10) #board should be an intilised board based on past function
+    ai_game_board = components.place_battleships(board=ai_board, ships=ai_ships, algorithm_and_filename=["random", "placement.json"]) #generates a board for the AI and globalises it
+    if request.method == 'GET': #When we recieve data, render the main.html template
+        return render_template('main.html', player_board=player_board, board_size = 10)
     
 @app.route('/attack', methods=['GET'])
 def process_attack():
@@ -54,6 +55,7 @@ def process_attack():
     Returns:
         _type_: _description_
     """
+    #We can get the coordinates the player attacked on click and cast into integers to use as coordinates for the back end
     x = request.args.get('x')
     y = request.args.get('y')
     coordinates = (int(x),int(y))
@@ -68,11 +70,7 @@ def process_attack():
     
     no_ai_ships = all(value == "0" for value in ai_battleships.values())  
     no_player_ships = all(value == "0" for value in player_battleships.values())
-            
-            
-    print(player_battleships) 
-    print(ai_battleships)
-    
+
     if no_ai_ships:
         return jsonify({'hit': hit, 'AI_Turn': ai_attack_coords, 'finished':"Game over, player wins!"})
     elif no_player_ships:

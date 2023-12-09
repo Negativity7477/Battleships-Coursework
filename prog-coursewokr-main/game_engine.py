@@ -3,7 +3,7 @@ import components
 import json
 
 def attack(coordinates: tuple, board: list, battleships: dict) -> bool:
-    """Takes in user defined coordinates and attacks that square
+    """Takes in user / AI defined coordinates and attacks that square
 
     Args:
         coordinates (tuple): attack coordinates given from user
@@ -19,14 +19,14 @@ def attack(coordinates: tuple, board: list, battleships: dict) -> bool:
     #sets square_content to whatever is in the square attacked by whatever called the function
     if square_contents == None: #If didn't hit a battleship
         is_hit = False
-        board[x_coord][y_coord] = "O" #This is to show that this coord has been shot and missed
+        board[x_coord][y_coord] = "O" #This is to show that this coord has been shot and missed for later use
         print("You missed")
     else:
         is_hit = True
         board[x_coord][y_coord] = None 
         #square_contents is a string, so it must be converted to an int to decrement
         battleships[square_contents[0]] = str(int(battleships[square_contents[0]]) - 1)   
-        board[x_coord][y_coord] = "X"
+        board[x_coord][y_coord] = "X" #After processing the attack, we show it has been shot for later use
         print("You hit")         
     return is_hit
 
@@ -43,12 +43,29 @@ def cli_coordinates_input() -> tuple:
             x_coord, y_coord = map(int, coords.split(',')) #split up the x and y and cast to int
             coordinates = (x_coord, y_coord)
             return coordinates #break the loop and return if hasn't crashed 
-        except ValueError: 
+        except ValueError: #Catch value exceptions when inputing non ints
             print("Please only use integers")
-        except IndexError:
+        except IndexError: #Catch index exceptions when out of board
             print("Please input inside of board")
+        except: #Catch other exceptions
+            print("An error occured, make sure your input is within the board and an integer")
 
-        
+def find_algorithm() -> str:
+    """This function allows the user to pick which algorithm to place
+    ships with
+
+    Returns:
+        str: the algorithm to use
+    """
+    valid_algorithm = False
+    while not valid_algorithm: 
+        valid_algorithm = True
+        algorithm = input("Please enter an algorithm to place your ships, simple, random or custom")
+        algorithm = algorithm.lower()
+        if algorithm != "simple" and algorithm != "random" and algorithm != "custom":
+            valid_algorithm = False
+            print("please use one of the 3 algorithms")
+    return algorithm
     
 
 def simple_game_loop():
@@ -58,7 +75,9 @@ def simple_game_loop():
     time.sleep(2.5) #Pauses on run
     battleships = components.create_battleships()
     board = components.initialise_board()
-    components.place_battleships(board, battleships, "custom")
+    algorithm = find_algorithm()
+    algorithm_and_filename = [algorithm, "placement.json"]
+    components.place_battleships(board, battleships, algorithm_and_filename=algorithm_and_filename)
     game_over = False
     while not game_over: #loop through until all ships sunk
         coords = cli_coordinates_input()
