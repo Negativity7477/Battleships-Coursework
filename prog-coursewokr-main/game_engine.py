@@ -15,8 +15,12 @@ def attack(coordinates: tuple, board: list, battleships: dict) -> bool:
     """
     x_coord = coordinates[0]
     y_coord = coordinates[1]
-    square_contents = board[x_coord][y_coord] 
-    #sets square_content to whatever is in the square attacked by whatever called the function
+    try:
+        square_contents = board[x_coord][y_coord] 
+        #sets square_content to whatever is in the square attacked by whatever called the function
+    except IndexError:
+        return None #The only error that can occur here is an IndexError, so we return None if it is an error
+    
     if square_contents == None: #If didn't hit a battleship
         is_hit = False
         board[x_coord][y_coord] = "O" #This is to show that this coord has been shot and missed for later use
@@ -37,18 +41,31 @@ def cli_coordinates_input() -> tuple:
     Returns:
         tuple: The input coordinate
     """
-    while True: #loop through while coords are bad
-        try:
-            coords = input("Enter a coord in the format x,y")
-            x_coord, y_coord = map(int, coords.split(',')) #split up the x and y and cast to int
+    try:
+        coords = input("Enter a coord in the format x,y")
+        x_coord, y_coord = map(int, coords.split(',')) #split up the x and y and cast to int
+        if x_coord > -1 and y_coord > -1:
             coordinates = (x_coord, y_coord)
-            return coordinates #break the loop and return if hasn't crashed 
-        except ValueError: #Catch value exceptions when inputing non ints
-            print("Please only use integers")
-        except IndexError: #Catch index exceptions when out of board
-            print("Please input inside of board")
-        except: #Catch other exceptions
-            print("An error occured, make sure your input is within the board and an integer")
+        else:
+            print("Positive integers only")
+            coordinates = (-1, -1)
+        #This if else block checks to make sure the values are positive
+        
+        return coordinates #break the loop and return if hasn't crashed 
+    
+    except ValueError: #Catch value exceptions when inputing non ints
+        print("Please only use integers")
+        coordinates = (-1, -1)
+        
+    except IndexError: #Catch index exceptions when out of board
+        print("Please input inside of board")
+        coordinates = (-1, -1)
+        
+    except: #Catch other exceptions
+        print("An error occured, make sure your input is within the board and an integer")
+        coordinates = (-1, -1)
+        
+    return coordinates
 
 def find_algorithm() -> str:
     """This function allows the user to pick which algorithm to place
@@ -80,9 +97,14 @@ def simple_game_loop():
     components.place_battleships(board, battleships, algorithm_and_filename=algorithm_and_filename)
     game_over = False
     while not game_over: #loop through until all ships sunk
-        coords = cli_coordinates_input()
+        coords = (-1, -1)
+        while coords == (-1, -1):
+            coords = cli_coordinates_input()
         hit = attack(coords, board, battleships)
-        if hit: #When we hit, update the board
+        if hit == None:
+            print("please input a value within the board")
+            continue
+        elif hit: #When we hit, update the board
             board[coords[0]][coords[1]] = None
         game_over = True
         for value in battleships.values():

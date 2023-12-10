@@ -34,7 +34,7 @@ def placement_interface():
         player_board = components.place_battleships(board, player_battleships, algorithm_and_filename) #now we can create a board and globalise it
         return jsonify({'message': 'Received'}), 200 #Allows the front end to know we recieved the data
 
-@app.route('/', methods=['GET']) #Runs on http://127.0.0.1:500
+@app.route('/', methods=['GET']) #Runs on http://127.0.0.1:5000 
 def root():
     """The main logic behind the main page
 

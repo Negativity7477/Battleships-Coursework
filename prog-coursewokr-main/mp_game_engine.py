@@ -89,21 +89,24 @@ def ai_opponent_game_loop():
     while not finished:
         old_coords = True #Loops while attacking previously attack coords
         while old_coords:
-            attack_coords = game_engine.cli_coordinates_input() #Generate attack coordinates
-            if ai_board[attack_coords[0]][attack_coords[1]] == "X" or ai_board[attack_coords[0]][attack_coords[1]] == "O":
-                old_coords = True
-                print("Please attack new coordinates")
-            else:
-                old_coords = False #Break the loop
-        
+            attack_coords = (-1, -1)
+            while attack_coords == (-1, -1):
+                attack_coords = game_engine.cli_coordinates_input() #Generate attack coordinates
+            try:
+                if ai_board[attack_coords[0]][attack_coords[1]] == "X" or ai_board[attack_coords[0]][attack_coords[1]] == "O":
+                    old_coords = True
+                    print("Please attack new coordinates")
+                else:
+                    old_coords = False #Break the loop
+            except IndexError:
+                print("please input a value within the board")
+                continue
         print("Player, ")#Allows the ability to distinguish between players and AI attacks
         game_engine.attack(attack_coords, ai_board, ai_ships)
 
         print("Ai, ") #Allows the ability to distinguish between players and AI attacks
         ai_attack = generate_attack(player_board)
-
         game_engine.attack(ai_attack, player_board, player_ships)
-
         print_board(player_board)
 
         no_ai_ships = all(value == '0' for value in ai_ships.values())  
@@ -118,6 +121,10 @@ def ai_opponent_game_loop():
             finished = True
     
 def multiplayer_game_loop():
+    """This function allows 2 people to play against each other in the command line
+    """
+    
+    
     print("welcome to battleships")
     time.sleep(2.5) #Pauses on run
     username_1 = input("enter username 1") #Take the username for player
@@ -143,18 +150,33 @@ def multiplayer_game_loop():
     while not finished:
         old_coords = True #Loops while attacking previously attack coords
         while old_coords:
-            attack_coords = game_engine.cli_coordinates_input() #Generate attack coordinates
-            if player_board_2[attack_coords[0]][attack_coords[1]] == "X" or player_board_2[attack_coords[0]][attack_coords[1]] == "O":
-                old_coords = True
-                print("Please attack new coordinates")
-            else:
-                old_coords = False #Break the loop
+            attack_coords = (-1,-1)
+            while attack_coords == (-1,-1):
+                attack_coords = game_engine.cli_coordinates_input() #Generate attack coordinates
+            try:
+                if player_board_2[attack_coords[0]][attack_coords[1]] == "X" or player_board_2[attack_coords[0]][attack_coords[1]] == "O":
+                    old_coords = True
+                    print("Please attack new coordinates")
+                else:
+                    old_coords = False #Break the loop
+            except IndexError:
+                print("please input a value within the board")
+                continue
+            
+            print("Player 1, ")#Player 1's turn
+            game_engine.attack(attack_coords, player_board_2, player_ships_2)
+            print("Player 2, ")#Player 2's turn
         
-        print("Player 1, ")#Allows the ability to distinguish between both players
-        game_engine.attack(attack_coords, player_board_2, player_ships_2)
-        print("Player 2, ") #Allows the ability to distinguish between both players
-        attack_coords = game_engine.cli_coordinates_input()
-        game_engine.attack(attack_coords, player_board_1, player_ships_1)
+        while True:
+            attack_coords = (-1,-1)
+            while attack_coords == (-1,-1):
+                attack_coords = game_engine.cli_coordinates_input()
+            hit = game_engine.attack(attack_coords, player_board_1, player_ships_1)
+            if hit == None:
+                print("please input a value within the board")
+                continue
+            else:
+                break
         
         no_player_ships_1 = all(value == '0' for value in player_ships_1.values())
         no_player_ships_2 = all(value == '0' for value in player_ships_2.values())  

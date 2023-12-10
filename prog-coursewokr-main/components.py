@@ -1,38 +1,35 @@
 import json
 import random 
-'''import json to read json files and random for random placement
-'''
 
 #ROUTE_FILE = "D:/0000000 wrok/Uni/Semester 1/battleships colour/Battleships-Coursework/prog-coursewokr-main/" 
 ROUTE_FILE = "H:/git/Battleships-Coursework/prog-coursewokr-main/"
 
-#Advice from Billy - When submitting, remove route file and leave a note in the READ ME
-#Note this fucks up one of the tests that checks if the file exists
-
+#This constant has been commented but shows an example of how the ROUTE_FILE string should look if battleships.txt and placement.json
+#cannot be found when opening
 
 def initialise_board(size: int = 10) -> list:
-    """Creates the board
+    """Creates an empty board of a given size
     Args:
         size (int, optional): Size of the grid to play on. Defaults to 10.
     Returns:
-        list: Return a list of list of nones
+        list: Return a list of list of containing NONE values
     """
     board_list = [ [None for x in range(0, size)] for y in range(0, size)] #Produces a grid of x rows and x columns
     return board_list
 
 
 def create_battleships(filename: str = "battleships.txt") -> dict:
-    """Creates the battleships that can then later be placed
+    """Creates the battleships as a dictionary that can then later be placed
     Args:
         filename (str, optional): A file containing the battleships names and size. Defaults to "battleships.txt ".
     Returns:
-        dict: _description_
+        dict: A dictionary with the name of the ships as the keys and the size of the ships as the values 
     """
     
     battleships = {}
     with open(ROUTE_FILE + filename) as text_file: 
         for line in text_file:
-            line = line.strip()
+            line = line.strip() 
             (key, val) = line.split(':') #Split the key and value up from the colon
             battleships[key] = int(val) #Add the integer value to the dictionary
        
@@ -40,7 +37,8 @@ def create_battleships(filename: str = "battleships.txt") -> dict:
 
 
 def place_battleships(board: list, ships: dict, algorithm_and_filename: list = ["custom", "placement.json"]) -> list:
-    """A function to place down the ships
+    """A function to place down the ships, we can choose what method to place down the ships and if we want to use custom placement, we can choose 
+    1 or 2 json files to use.
     Args:
         board (list): Empty list of list from initialise_board
         ships (dict): Dictionary of ships from create_battleships
