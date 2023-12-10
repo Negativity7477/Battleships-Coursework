@@ -10,13 +10,16 @@ app = Flask(__name__)
 #ROUTE_FILE = "D:/0000000 wrok/Uni/Semester 1/battleships colour/Battleships-Coursework/prog-coursewokr-main/"
 ROUTE_FILE = "H:/git/Battleships-Coursework/prog-coursewokr-main/"
 
+#This constant has been commented but shows an example of how the ROUTE_FILE string should look if battleships.txt and placement.json
+#cannot be found when opening
+
 board = components.initialise_board()
 player_battleships = components.create_battleships()
 ai_battleships = components.create_battleships()
 
 @app.route('/placement', methods=['GET', 'POST']) #Runs when visiting http://127.0.0.1:5000/placement
 def placement_interface():
-    """Allows the user to place their battleships on the web inteface
+    """Allows the user to place their battleships on the web interface
 
     Returns:
         The parameters to render
