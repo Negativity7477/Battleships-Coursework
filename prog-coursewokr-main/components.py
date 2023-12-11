@@ -36,31 +36,31 @@ def create_battleships(filename: str = "battleships.txt") -> dict:
     return battleships
 
 
-def place_battleships(board: list, ships: dict, algorithm_and_filename: list = ["custom", "placement.json"]) -> list:
+def place_battleships(board: list, ships: dict, algorithm: list = ["custom", "placement.json"]) -> list:
     """A function to place down the ships, we can choose what method to place down the ships and if we want to use custom placement, we can choose 
     1 or 2 json files to use.
     Args:
         board (list): Empty list of list from initialise_board
         ships (dict): Dictionary of ships from create_battleships
-        algorithm_and_filename (str): Allows the user to select how the battleships are placed and which file custom should place
+        algorithm (str): Allows the user to select how the battleships are placed and which file custom should place
     Returns:
-        list: _description_
+        list: returns the board with the battleships placed as required
     """
     
-    algorithm = algorithm_and_filename[0] #Unpack the algorithm to place
-    filename = algorithm_and_filename[1] #Unpack the filename to use to place
+    place_type = algorithm[0] #Unpack the algorithm to place
+    filename = algorithm[1] #Unpack the filename to use to place
     
     for x in range(0, len(ships)): #loops through all ships in dictionary
         key = list(ships.keys())[x] #cast the ships key into a list
         value = list(ships.values())[x] #cast the ships values into a list
         
         #Deals with a simple placement
-        if algorithm == "simple":
+        if place_type == "simple":
             for i in range(0, int(value)):
                 board[x][i] = [key]
                 
         #Block of code below deals with if we want a random placement
-        elif algorithm == "random":
+        elif place_type == "random":
             invalid_placement = True
             while invalid_placement: #Keep looping if ships are overlapping
                 invalid_placement = False
@@ -94,7 +94,7 @@ def place_battleships(board: list, ships: dict, algorithm_and_filename: list = [
                     board[start_row][start_column + j] = [key] #only loop through the column to place horizontally
                     
         #Below deals with a custom placement from a json file
-        elif algorithm == "custom":
+        elif place_type == "custom":
             with open(ROUTE_FILE + filename) as ship_data:
                 data = json.load(ship_data) #convert the json into a usable foramt
                 json_values = list(data.values()) #make a list of the json values
@@ -107,5 +107,5 @@ def place_battleships(board: list, ships: dict, algorithm_and_filename: list = [
             elif rotation == 'h':
                 for j in range(0, int(value)):
                     board[start_row][start_column + j] = [key] #only loop through the column to place horizontally
-                
+      
     return board

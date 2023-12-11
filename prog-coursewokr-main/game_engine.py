@@ -94,7 +94,7 @@ def simple_game_loop():
     board = components.initialise_board()
     algorithm = find_algorithm()
     algorithm_and_filename = [algorithm, "placement.json"]
-    components.place_battleships(board, battleships, algorithm_and_filename=algorithm_and_filename)
+    components.place_battleships(board, battleships, algorithm=algorithm_and_filename)
     game_over = False
     while not game_over: #loop through until all ships sunk
         coords = (-1, -1)

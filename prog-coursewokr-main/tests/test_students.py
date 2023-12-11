@@ -93,7 +93,7 @@ def test_battleships_txt_exists():
         pytest.fail("battleships.txt file does not exist")
 
 
-@pytest.mark.dependency(depends=["test_components_exists", "test_battleships_txt_exists"])
+
 def test_create_battleships_argument():
     """
     Test if the create_battleships function accepts a string argument.
@@ -107,7 +107,7 @@ def test_create_battleships_argument():
         pytest.fail("create_battleships function does not accept a string argument")
 
 
-@pytest.mark.dependency(depends=["test_components_exists", "test_battleships_txt_exists"])
+
 def test_create_battleships_return_type():
     """
     Test if the create_battleships function returns a dictionary.
@@ -135,7 +135,7 @@ def test_place_battleships_exists():
         pytest.fail("place_battleships function does not exist")
 
 
-@pytest.mark.dependency(depends=["test_components_exists", "test_battleships_txt_exists"])
+
 def test_place_battleships_arguments():
     """
     Test if the place_battleships function accepts a list and a dictionary argument.
@@ -165,7 +165,7 @@ def test_place_battleships_arguments():
         pytest.fail("place_battleships function does not accept a list and a dictionary argument")
 
 
-@pytest.mark.dependency(depends=["test_components_exists", "test_battleships_txt_exists"])
+
 def test_place_battleships_return_type():
     """
     Test if the place_battleships function returns a list of lists of strings/None values.
@@ -212,7 +212,7 @@ def test_attack_exists():
         pytest.fail("attack function does not exist")
 
 
-@pytest.mark.dependency(depends=["test_game_engine_exists", "test_components_exists", "test_battleships_txt_exists"])
+
 def test_attack_arguments():
     """
     Test if the attack function accepts a tuple, a list, and a dictionary argument.

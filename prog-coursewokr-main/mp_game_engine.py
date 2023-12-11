@@ -16,13 +16,13 @@ def initialise_player(username:str, algorithm:list = ["custom", "placement.json"
     """
     board = components.initialise_board() 
     battleships = components.create_battleships() 
-    board = components.place_battleships(board = board, ships = battleships, algorithm_and_filename = algorithm)
+    board = components.place_battleships(board = board, ships = battleships, algorithm = algorithm)
     
     players[username] = {'board':board, 'ships':battleships} #Create the dictionary, key as username, values are board and battleships
     return players
 
 
-def generate_attack(player_board:list) -> tuple:
+def generate_attack(player_board) -> tuple:
     """Generates an AI attack at coordinates yet to be hit
     Args:
         board (list): the players board to attack
@@ -138,8 +138,8 @@ def multiplayer_game_loop():
     player_1_dict = initialise_player(username_1, algorithm_and_filename)
     player_2_dict = initialise_player(username_2, algorithm_and_filename_2)
 
-    global player_board_1 #player_board is used in other functions so must be globalised
-    player_board_1 = player_1_dict[username_1]['board']
+    global player_board #player_board is used in other functions so must be globalised
+    player_board = player_1_dict[username_1]['board']
     player_ships_1 = player_1_dict[username_1]['ships']
     global player_board_2 #We will also need to use player_board_2 
     player_board_2 = player_2_dict[username_2]['board']
@@ -171,7 +171,7 @@ def multiplayer_game_loop():
             attack_coords = (-1,-1)
             while attack_coords == (-1,-1):
                 attack_coords = game_engine.cli_coordinates_input()
-            hit = game_engine.attack(attack_coords, player_board_1, player_ships_1)
+            hit = game_engine.attack(attack_coords, player_board, player_ships_1)
             if hit == None:
                 print("please input a value within the board")
                 continue
@@ -183,13 +183,13 @@ def multiplayer_game_loop():
         #Check all ship sizes in the both dictionaries.
         
         if no_player_ships_1: #All player 2's ships have been sunk
-            print_board(player_board_1)
+            print_board(player_board)
             print("---------------------") #Print both player's boards to show where their ships were
             print_board(player_board_2)
             print(f"Congratulations! You have won {username_1}.")
             finished = True 
         elif no_player_ships_2: #All player 1's ships have been sunk
-            print_board(player_board_1)
+            print_board(player_board)
             print("---------------------") #Print both player's boards to show where their ships were
             print_board(player_board_2)
             print(f"Congratulations! You have won {username_2}.")

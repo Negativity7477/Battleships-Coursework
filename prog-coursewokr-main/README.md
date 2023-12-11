@@ -1,4 +1,4 @@
-# Battleships-Coursework
+ # Battleships-Coursework
 
 This program runs the game battleships. It can run with a web interface by running main and going to local host, or it can run in the terminal by running mp_game_engine. This was built as a piece of University coursework.
 
@@ -10,7 +10,16 @@ Prerequisites -
 
 - Flask
 
-  
+- Pytest
+
+- Inspect
+
+- Importlib
+
+- tests.tests_helper_functions
+
+- Random
+
 
 Getting started tutorial (if program does not run because of a file error, look at developer documentation section) -
 
@@ -47,6 +56,10 @@ Getting started tutorial (if program does not run because of a file error, look 
 
 
 Testing - 
+In order to run the tests, make sure pytest is installed. In VSCode, open the testing section and configure tests. Use the pytests option and open in the root directory. 
+We can then run the tests.
+Note test_generate_attacK_return_type fails
+
 
 
 Developer documentation -
@@ -66,10 +79,12 @@ note, the example in main just requires adding "ROUTE_FILE +" at the beginning a
 
 Modules - 
 The components module contains key functions for setting up the game. It does nothing for processing the game. It contains three functions, one for creating an empty board for use in other places, one for creating a dictionary containing the name of the battleships and their respective size and one to place those battle ships on the board in 3 different ways based on the arguments provided. 
-
+The game_engine module contains a simple game loop to test the mechanics of the module. It has 3 other functions, one to process an attack, one to get the user input to attack a coordinate and one to allow the user to select which algorithm to place battleships with. Note that this last function can be run either to selecct which algorithm the user places the ships with or which function the AI places the ships with.
+The mp_game_engine module allows for gameplay. There is a total of 5 functions. One initalises a dictionary with key of username and value board and ships. Another function allows for an ascii board to be printed. The last 3 functions are for gameplay. A function allows the AI to get coordinates to attack and the other 2 functions deal with AI and multiplayer opponents respectively. This module combines both game_engine and components in order to function
+The main function incorporates the web interface to play. It contains 3 functions. One allows placement of ships on web interface, one renders the main gameplay board and the last allows attacking the board and updating the backend.
 
 
 
 License - see LICENSE.txt, the project is licensed under the terms of the MIT license.
-Details - 
-Authors - Finn Gosney 
+Details - {Contact details}
+Authors - {Name}

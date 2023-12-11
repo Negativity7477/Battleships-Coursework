@@ -47,7 +47,7 @@ def root():
     global ai_game_board
     ai_board = components.initialise_board()
     ai_ships = components.create_battleships()
-    ai_game_board = components.place_battleships(board=ai_board, ships=ai_ships, algorithm_and_filename=["random", "placement.json"]) #generates a board for the AI and globalises it
+    ai_game_board = components.place_battleships(board=ai_board, ships=ai_ships, algorithm=["random", "placement.json"]) #generates a board for the AI and globalises it
     if request.method == 'GET': #When we recieve data, render the main.html template
         return render_template('main.html', player_board=player_board, board_size = 10)
     
