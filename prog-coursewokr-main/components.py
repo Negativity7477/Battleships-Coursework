@@ -1,8 +1,8 @@
 import json
 import random 
 
-#ROUTE_FILE = "D:/0000000 wrok/Uni/Semester 1/battleships colour/Battleships-Coursework/prog-coursewokr-main/" 
-ROUTE_FILE = "H:/git/Battleships-Coursework/prog-coursewokr-main/"
+ROUTE_FILE = "D:/0000000 wrok/Uni/Semester 1/battleships colour/Battleships-Coursework/prog-coursewokr-main/" 
+#ROUTE_FILE = "H:/git/Battleships-Coursework/prog-coursewokr-main/"
 
 #This constant has been commented but shows an example of how the ROUTE_FILE string should look if battleships.txt and placement.json
 #cannot be found when opening
