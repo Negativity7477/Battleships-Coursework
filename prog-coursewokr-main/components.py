@@ -1,51 +1,54 @@
 import json
 import random 
-'''import json to read json files and random for random placement
-'''
 
-#ROUTE_FILE = "D:/0000000 wrok/Uni/Semester 1/battleships colour/Battleships-Coursework/prog-coursewokr-main/" 
+ROUTE_FILE = "D:/0000000 wrok/Uni/Semester 1/battleships colour/Battleships-Coursework/prog-coursewokr-main/" 
 #ROUTE_FILE = "H:/git/Battleships-Coursework/prog-coursewokr-main/"
 
-#Advice from Billy - When submitting, remove route file and leave a note in the READ ME
-#Note this fucks up one of the tests that checks if the file exists
+#This constant has been commented but shows an example of how the ROUTE_FILE string should look if battleships.txt and placement.json
+#cannot be found when opening
 
 def initialise_board(size: int = 10) -> list:
-    """Creates the board
+    """Creates an empty board of a given size
     Args:
-        size (int, optional): Size of the grid. Defaults to 10.
+        size (int, optional): Size of the grid to play on. Defaults to 10.
     Returns:
-        list: Return a list of list of nones
+        list: Return a list of list of containing NONE values
     """
     board_list = [ [None for x in range(0, size)] for y in range(0, size)] #Produces a grid of x rows and x columns
     return board_list
 
+
 def create_battleships(filename: str = "battleships.txt") -> dict:
-    """Creates the battleships that can then later be placed
+    """Creates the battleships as a dictionary that can then later be placed
     Args:
         filename (str, optional): A file containing the battleships names and size. Defaults to "battleships.txt ".
     Returns:
-        dict: _description_
+        dict: A dictionary with the name of the ships as the keys and the size of the ships as the values 
     """
     
     battleships = {}
-    with open(filename) as text_file:
+    with open(ROUTE_FILE + filename) as text_file: 
         for line in text_file:
-            line = line.strip()
-            (key, val) = line.split(':')
-            battleships[key] = int(val)
+            line = line.strip() 
+            (key, val) = line.split(':') #Split the key and value up from the colon
+            battleships[key] = int(val) #Add the integer value to the dictionary
        
     return battleships
 
 
-def place_battleships(board: list, ships: dict, algorithm: str = "custom") -> list:
-    """A function to place down the ships
+def place_battleships(board: list, ships: dict, algorithm_and_filename: list = ["custom", "placement.json"]) -> list:
+    """A function to place down the ships, we can choose what method to place down the ships and if we want to use custom placement, we can choose 
+    1 or 2 json files to use.
     Args:
         board (list): Empty list of list from initialise_board
         ships (dict): Dictionary of ships from create_battleships
-        algorithm (str): Allows the user to select how the battleships are placed
+        algorithm_and_filename (str): Allows the user to select how the battleships are placed and which file custom should place
     Returns:
         list: _description_
     """
+    
+    algorithm = algorithm_and_filename[0] #Unpack the algorithm to place
+    filename = algorithm_and_filename[1] #Unpack the filename to use to place
     
     for x in range(0, len(ships)): #loops through all ships in dictionary
         key = list(ships.keys())[x] #cast the ships key into a list
@@ -92,11 +95,11 @@ def place_battleships(board: list, ships: dict, algorithm: str = "custom") -> li
                     
         #Below deals with a custom placement from a json file
         elif algorithm == "custom":
-            with open('placement.json') as ship_data:
-                data = json.load(ship_data) #convert the json into a useable foramt
+            with open(ROUTE_FILE + filename) as ship_data:
+                data = json.load(ship_data) #convert the json into a usable foramt
                 json_values = list(data.values()) #make a list of the json values
             start_row = int(json_values[x][1]) #access the string stored in start x coord of json file for each ship and cast to int
-            start_column = int(json_values[x][0])
+            start_column = int(json_values[x][0])#access the string stored in start y coord of json file for each ship and cast to int
             rotation = str(json_values[x][2]) #access the rotation from the json file for each ship and cast to string
             if rotation == 'v':
                 for i in range(0, int(value)):
@@ -106,11 +109,3 @@ def place_battleships(board: list, ships: dict, algorithm: str = "custom") -> li
                     board[start_row][start_column + j] = [key] #only loop through the column to place horizontally
                 
     return board
-
-
-#board = initialise_board()
-#ships = create_battleships()
-#place_battleships(board, ships, "random")
-#
-#for x in board:
-#    print(x)
