@@ -1,6 +1,5 @@
 import time
 import components
-import json
 
 def attack(coordinates: tuple, board: list, battleships: dict) -> bool:
     """Takes in user / AI defined coordinates and attacks that square
@@ -16,24 +15,24 @@ def attack(coordinates: tuple, board: list, battleships: dict) -> bool:
     x_coord = coordinates[0]
     y_coord = coordinates[1]
     try:
-        square_contents = board[x_coord][y_coord] 
+        square_contents = board[x_coord][y_coord]
         #sets square_content to whatever is in the square attacked by whatever called the function
     except IndexError:
-        return None #The only error that can occur here is an IndexError, so we return None if it is an error
+        return None #Return None if there is an IndexError
     except KeyError:
         print("Please make sure your coordinates are fresh and valid")
-    
-    if square_contents == None: #If didn't hit a battleship
+
+    if square_contents is None: #If didn't hit a battleship
         is_hit = False
-        board[x_coord][y_coord] = "O" #This is to show that this coord has been shot and missed for later use
+        board[x_coord][y_coord] = "O" #Show this coordinate has been shot and missed
         print("You missed")
     else:
         is_hit = True
-        board[x_coord][y_coord] = None 
+        board[x_coord][y_coord] = None
         #square_contents is a string, so it must be converted to an int to decrement
-        battleships[square_contents[0]] = str(int(battleships[square_contents[0]]) - 1)   
-        board[x_coord][y_coord] = "X" #After processing the attack, we show it has been shot for later use
-        print("You hit")         
+        battleships[square_contents[0]] = str(int(battleships[square_contents[0]]) - 1)
+        board[x_coord][y_coord] = "X" #Show this coordinate has been shot and hit
+        print("You hit")
     return is_hit
 
 
@@ -52,21 +51,21 @@ def cli_coordinates_input() -> tuple:
             print("Positive integers only")
             coordinates = (-1, -1)
         #This if else block checks to make sure the values are positive
-        
-        return coordinates #break the loop and return if hasn't crashed 
-    
-    except ValueError: #Catch value exceptions when inputing non ints
+
+        return coordinates #break the loop and return if hasn't crashed
+
+    except ValueError: #Catch value exceptions when an input is not an int
         print("Please only use integers")
         coordinates = (-1, -1)
-        
+
     except IndexError: #Catch index exceptions when out of board
         print("Please input inside of board")
         coordinates = (-1, -1)
-        
+
     except: #Catch other exceptions
-        print("An error occured, make sure your input is within the board and an integer")
+        print("An error occurred, make sure your input is within the board and an integer")
         coordinates = (-1, -1)
-        
+
     return coordinates
 
 def find_algorithm() -> str:
@@ -77,7 +76,7 @@ def find_algorithm() -> str:
         str: the algorithm to use
     """
     valid_algorithm = False
-    while not valid_algorithm: 
+    while not valid_algorithm:
         valid_algorithm = True
         algorithm = input("Please enter an algorithm to place your ships, simple, random or custom")
         algorithm = algorithm.lower()
@@ -85,7 +84,7 @@ def find_algorithm() -> str:
             valid_algorithm = False
             print("please use one of the 3 algorithms")
     return algorithm
-    
+
 
 def simple_game_loop():
     """Loops through until the game is over
@@ -103,7 +102,7 @@ def simple_game_loop():
         while coords == (-1, -1):
             coords = cli_coordinates_input()
         hit = attack(coords, board, battleships)
-        if hit == None:
+        if hit is None:
             print("please input a value within the board")
             continue
         elif hit: #When we hit, update the board
@@ -111,7 +110,7 @@ def simple_game_loop():
         game_over = True
         for value in battleships.values():
             if value != '0': #Only run when all dict values are 0
-                game_over = False      
+                game_over = False
     print("Game over")
 
 if __name__ == '__main__':
