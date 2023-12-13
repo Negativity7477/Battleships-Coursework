@@ -1,12 +1,6 @@
 import json
 import random 
 
-ROUTE_FILE = "D:/0000000 wrok/Uni/Semester 1/battleships colour/Battleships-Coursework/prog-coursewokr-main/" 
-#ROUTE_FILE = "H:/git/Battleships-Coursework/prog-coursewokr-main/"
-
-#This constant has been commented but shows an example of how the ROUTE_FILE string should look if battleships.txt and placement.json
-#cannot be found when opening
-
 def initialise_board(size: int = 10) -> list:
     """Creates an empty board of a given size
     Args:
@@ -27,7 +21,7 @@ def create_battleships(filename: str = "battleships.txt") -> dict:
     """
     
     battleships = {}
-    with open(ROUTE_FILE + filename) as text_file: 
+    with open(filename) as text_file: 
         for line in text_file:
             line = line.strip() 
             (key, val) = line.split(':') #Split the key and value up from the colon
@@ -85,7 +79,7 @@ def place_battleships(board: list, ships: dict, algorithm: list = ["custom", "pl
                     for j in range(0, int(value)):
                         if board[start_row][start_column + j] != None:
                             invalid_placement = True
-                #If horizontal placement, check all horizontal psots to make sure no ships overlap, if they do we loop again
+                #If horizontal placement, check all horizontal spots to make sure no ships overlap, if they do we loop again
             if rotation == "v":
                 for i in range(0, int(value)):
                     board[start_row + i][start_column] = [key] #only loop through the row to place vertically
@@ -95,17 +89,24 @@ def place_battleships(board: list, ships: dict, algorithm: list = ["custom", "pl
                     
         #Below deals with a custom placement from a json file
         elif place_type == "custom":
-            with open(ROUTE_FILE + filename) as ship_data:
-                data = json.load(ship_data) #convert the json into a usable foramt
-                json_values = list(data.values()) #make a list of the json values
-            start_row = int(json_values[x][1]) #access the string stored in start x coord of json file for each ship and cast to int
-            start_column = int(json_values[x][0])#access the string stored in start y coord of json file for each ship and cast to int
-            rotation = str(json_values[x][2]) #access the rotation from the json file for each ship and cast to string
-            if rotation == 'v':
-                for i in range(0, int(value)):
-                    board[start_row + i][start_column] = [key] #only loop through the row to place vertically
-            elif rotation == 'h':
-                for j in range(0, int(value)):
-                    board[start_row][start_column + j] = [key] #only loop through the column to place horizontally
-      
+            try:
+                with open(filename) as ship_data:
+                    data = json.load(ship_data) #convert the json into a usable format
+                    json_values = list(data.values()) #make a list of the json values
+                start_row = int(json_values[x][1]) #access the string stored in start x coord of json file for each ship and cast to int
+                start_column = int(json_values[x][0])#access the string stored in start y coord of json file for each ship and cast to int
+                rotation = str(json_values[x][2]) #access the rotation from the json file for each ship and cast to string
+                if rotation == 'v':
+                    for i in range(0, int(value)):
+                        board[start_row + i][start_column] = [key] #only loop through the row to place vertically
+                elif rotation == 'h':
+                    for j in range(0, int(value)):
+                        board[start_row][start_column + j] = [key] #only loop through the column to place horizontally
+            except ValueError:
+                print("The program will now close, please make sure to use integer values in placement.json in order for the program to run")
+                exit()
+            except IndexError:
+                print("The program will now close, please make sure to keep the values inside the bounds of the board in order for the program to run")
+                exit()
+
     return board

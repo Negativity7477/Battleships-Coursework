@@ -7,12 +7,6 @@ import mp_game_engine
  
 app = Flask(__name__)
 
-ROUTE_FILE = "D:/0000000 wrok/Uni/Semester 1/battleships colour/Battleships-Coursework/prog-coursewokr-main/"
-#ROUTE_FILE = "H:/git/Battleships-Coursework/prog-coursewokr-main/"
-
-#This constant has been commented but shows an example of how the ROUTE_FILE string should look if battleships.txt and placement.json
-#cannot be found when opening
-
 board = components.initialise_board()
 player_battleships = components.create_battleships()
 ai_battleships = components.create_battleships()
@@ -28,14 +22,14 @@ def placement_interface():
     if request.method == 'GET': #When we load the page, we render the placement.html template
         return render_template('placement.html', ships=player_battleships, board_size=10)
     
-    elif request.method == 'POST': #When we send the game, we recive data
-        ship_data = request.get_json() #Parse the recieved data into ship_data
-        with open(ROUTE_FILE + 'placement.json', 'w') as json_file: #Open our json for ship placement
+    elif request.method == 'POST': #When we send the game, we receive data
+        ship_data = request.get_json() #Parse the received data into ship_data
+        with open('placement.json', 'w') as json_file: #Open our json for ship placement
             json.dump(ship_data, json_file) #write the data into the placement json
         global player_board 
         algorithm_and_filename = ["custom", "placement.json"]
         player_board = components.place_battleships(board, player_battleships, algorithm_and_filename) #now we can create a board and globalise it
-        return jsonify({'message': 'Received'}), 200 #Allows the front end to know we recieved the data
+        return jsonify({'message': 'Received'}), 200 #Allows the front end to know we received the data
 
 @app.route('/', methods=['GET']) #Runs on http://127.0.0.1:5000 
 def root():

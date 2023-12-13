@@ -3,7 +3,6 @@
 This program runs the game battleships. It can run with a web interface by running main and going to local host, or it can run in the terminal by running mp_game_engine. This was built as a piece of University coursework.
 
   
-
 Prerequisites -
 
 - Python 3.9.13
@@ -33,6 +32,7 @@ Getting started tutorial (if program does not run because of a file error, look 
 2. Playing in command line against a random AI board using a custom placed board - 
 - Open the file "placement.json"
 - Change the json file to have the coordinates and rotation of the ships you want (Note the format is [start x coordinate, start y coordinate, rotation])
+- Make sure these values are valid (integers within the bounds of the board) otherwise the program will flag an error
 - Play the game as before, but instead of inputting simple or random when prompted, input custom
 
 3. Multiplayer in command line -
@@ -63,26 +63,12 @@ Note test_generate_attacK_return_type fails
 
 
 Developer documentation -
-Despite the file "battleships.txt" and the two json files for placement being in the same folder, the code may require a path to be provided.
-If the code is not running because files do not exist, please add your path to the ROUTE_FILE, using forward slashes instead of backwards slashes, and including a forward slash at the end of the path, example "D:/Battleships/"
-Then, in components on line 33 and 100, change the lines, and in main on line 30 
 
-with open(filename)
-
-to 
-
-with open(ROUTE_FILE + filename)
-
-
-note, the example in main just requires adding "ROUTE_FILE +" at the beginning as the files are constant.
-
-
-Modules - 
-The components module contains key functions for setting up the game. It does nothing for processing the game. It contains three functions, one for creating an empty board for use in other places, one for creating a dictionary containing the name of the battleships and their respective size and one to place those battle ships on the board in 3 different ways based on the arguments provided. 
-The game_engine module contains a simple game loop to test the mechanics of the module. It has 3 other functions, one to process an attack, one to get the user input to attack a coordinate and one to allow the user to select which algorithm to place battleships with. Note that this last function can be run either to selecct which algorithm the user places the ships with or which function the AI places the ships with.
-The mp_game_engine module allows for gameplay. There is a total of 5 functions. One initalises a dictionary with key of username and value board and ships. Another function allows for an ascii board to be printed. The last 3 functions are for gameplay. A function allows the AI to get coordinates to attack and the other 2 functions deal with AI and multiplayer opponents respectively. This module combines both game_engine and components in order to function
-The main function incorporates the web interface to play. It contains 3 functions. One allows placement of ships on web interface, one renders the main gameplay board and the last allows attacking the board and updating the backend.
-
+Modules -  
+The components module contains key functions for setting up the game. It does nothing for processing the game. It contains three functions, one for creating an empty board for use in other places, one for creating a dictionary containing the name of the battleships and their respective size and one to place those battle ships on the board in 3 different ways based on the arguments provided.  
+The game_engine module contains a simple game loop to test the mechanics of the module. It has 3 other functions, one to process an attack, one to get the user input to attack a coordinate and one to allow the user to select which algorithm to place battleships with. Note that this last function can be run either to select which algorithm the user places the ships with or which function the AI places the ships with.
+The mp_game_engine module allows for game play. There is a total of 5 functions. One initializes a dictionary with key of username and value board and ships. Another function allows for an ascii board to be printed. The last 3 functions are for game play. A function allows the AI to get coordinates to attack and the other 2 functions deal with AI and multiplayer opponents respectively. This module combines both game_engine and components in order to function
+The main function incorporates the web interface to play. It contains 3 functions. One allows placement of ships on web interface, one renders the main game play board and the last allows attacking the board and updating the backend.
 
 
 License - see LICENSE.txt, the project is licensed under the terms of the MIT license.

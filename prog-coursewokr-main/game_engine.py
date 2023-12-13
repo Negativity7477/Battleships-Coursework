@@ -20,6 +20,8 @@ def attack(coordinates: tuple, board: list, battleships: dict) -> bool:
         #sets square_content to whatever is in the square attacked by whatever called the function
     except IndexError:
         return None #The only error that can occur here is an IndexError, so we return None if it is an error
+    except KeyError:
+        print("Please make sure your coordinates are fresh and valid")
     
     if square_contents == None: #If didn't hit a battleship
         is_hit = False

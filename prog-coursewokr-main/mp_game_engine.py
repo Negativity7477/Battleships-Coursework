@@ -6,7 +6,7 @@ import time
 players = {}
 
 def initialise_player(username:str, algorithm:list = ["custom", "placement.json"]) -> dict:
-    """Initialises the dictionary 'players and globalises it
+    """Initialise the dictionary 'players' which is declared globally
 
     Args:
         player (str): this allows the function be called with either 2 players, or a player and AI
@@ -29,7 +29,7 @@ def generate_attack(player_board) -> tuple:
     Returns:
         tuple: coordinates to attack the player board
     """
-    #Loop through coordinates untill the AI hits new coordinates 
+    #Loop through coordinates until the AI hits new coordinates 
     old_coordinates = True
     while old_coordinates:
         old_coordinates = False
@@ -48,7 +48,7 @@ def print_board(board:list):
         board: the board to represent
     """     
     ascii_rep = components.initialise_board(len(board)) #Create a new board to print
-    #Loop through both grids (same size) and based on the main board we recieve, we add it to ascii_rep
+    #Loop through both grids (same size) and based on the main board we receive, we add it to ascii_rep
     #Meaning we can print an ascii representation of the main board
     for rows in range(0, len(board)):
         for columns in range(0, len(board)): 
@@ -116,7 +116,7 @@ def ai_opponent_game_loop():
         if no_ai_ships: #All ai ships have been sunk
             print("Congratulations! You have won.")
             finished = True
-        elif no_player_ships: #All player ships haveb een sunk
+        elif no_player_ships: #All player ships have been sunk
             print("Unfortunately, you have lost.")
             finished = True
     
@@ -150,27 +150,33 @@ def multiplayer_game_loop():
     while not finished:
         old_coords = True #Loops while attacking previously attack coords
         while old_coords:
-            attack_coords = (-1,-1)
+            attack_coords = (-1,-1) #Arbitrary value not on the board for processing
             while attack_coords == (-1,-1):
                 attack_coords = game_engine.cli_coordinates_input() #Generate attack coordinates
-            try:
-                if player_board_2[attack_coords[0]][attack_coords[1]] == "X" or player_board_2[attack_coords[0]][attack_coords[1]] == "O":
+            try: 
+                if player_board_2[attack_coords[0]][attack_coords[1]] == "X" or player_board_2[attack_coords[0]][attack_coords[1]] == "O": #Checks to make sure coordinates have not been hit previously
                     old_coords = True
-                    print("Please attack new coordinates")
+                    print("Please attack new coordinates") #We have to restart the loop if coordinates have been attacked already
+                    continue
                 else:
                     old_coords = False #Break the loop
             except IndexError:
                 print("please input a value within the board")
                 continue
+            except:
+                print("An error has occurred, please make sure your inputs are correct")
             
-            print("Player 1, ")#Player 1's turn
+            print("Player 1, ") #Player 1's turn
             game_engine.attack(attack_coords, player_board_2, player_ships_2)
-            print("Player 2, ")#Player 2's turn
+            print("Player 2, ") #Player 2's turn
         
         while True:
             attack_coords = (-1,-1)
             while attack_coords == (-1,-1):
                 attack_coords = game_engine.cli_coordinates_input()
+            if player_board[attack_coords[0]][attack_coords[1]] == "X" or player_board[attack_coords[0]][attack_coords[1]] == "O":
+                print("Please attack new coordinates")
+                continue
             hit = game_engine.attack(attack_coords, player_board, player_ships_1)
             if hit == None:
                 print("please input a value within the board")
